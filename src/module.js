@@ -1,13 +1,14 @@
-import { state } from "./store";
-import { countUp, countDown } from "./actions";
-// import CustomEvent from 'custom-event';
+// import CustomEvent from 'custom-event';  // CustomEvent polyfill
+
 import "./module.css";
+import { store as state } from "./store";
+import { countUp, countDown } from "./actions";
 
 export class Module {
 	constructor() {
 		this.dom();
 		this.events();
-		this.render();
+		this.render(state);
 	}
 
 	dom() {
@@ -19,21 +20,17 @@ export class Module {
 	events() {
 		// if button clicks
 		this.$buttonUp.addEventListener('click', function(e) {
-			document.dispatchEvent(new CustomEvent('action', countUp()));
+			document.dispatchEvent(new CustomEvent('action', { detail: countUp() }));
 		});
 		this.$buttonDown.addEventListener('click', function(e) {
-			document.dispatchEvent(new CustomEvent('action', countDown()));
+			document.dispatchEvent(new CustomEvent('action', { detail: countDown() }));
 		});
 
 		// if state changes
-		document.addEventListener('state', (e) => this.update());
-	}
-
-	update() {
-		this.$counter.innerHTML = state.counter;
+		document.addEventListener('state', (e) => this.render());
 	}
 
 	render() {
-		return this.update();
+		this.$counter.innerHTML = state.counter;
 	}
 }

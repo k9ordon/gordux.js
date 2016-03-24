@@ -1,7 +1,8 @@
-import { counterReducer } from "./reducer";
-// import CustomEvent from 'custom-event';
+// import CustomEvent from 'custom-event'; // CustomEvent polyfill
 
-export let state = {
+import { counterReducer } from "./reducer";
+
+export let store = {
 	counter: 0
 };
 
@@ -10,6 +11,6 @@ var reducers = function(state, action) {
 }
 
 document.addEventListener('action', function(e) {
-	state = reducers(state, e.detail);
+	store = reducers(store, e.detail);
 	document.dispatchEvent(new CustomEvent('state'));
 }, false);
