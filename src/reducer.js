@@ -6,7 +6,7 @@ export function counterReducer(state, action) {
 			return Object.assign(state, {
 				counter: state.counter + 1
 			});
-        case COUNT_DOWN:
+		case COUNT_DOWN:
 			return Object.assign(state, {
 				counter: state.counter - 1
 			});
