@@ -1,0 +1,55 @@
+<html>
+<body>
+
+<button>countUp</button>
+<div></div>
+
+<script>
+
+// Action
+
+const COUNT_UP = "COUNT_UP";
+function countUp() {
+    return {
+        type: COUNT_UP
+    };
+}
+
+// Reducer
+
+function reducer(state, action) {
+  switch (action.type) {
+    case COUNT_UP:
+      return state + 1;
+    default:
+      return state
+  }
+}
+
+// State Store
+
+let store = 0; // Initial state
+
+document.addEventListener('action', function(e) {
+    store = reducer(store, e.detail);
+    document.dispatchEvent(new CustomEvent('state'));
+}, false);
+
+// UI state change method
+
+function render() {
+  let $div = document.querySelector('div');
+  $div.innerHTML = store;
+}
+document.addEventListener('state', render);
+render();
+
+// UI event handler
+
+let $button = document.querySelector('button');
+$button.addEventListener("click", function() {
+  document.dispatchEvent(
+    new CustomEvent('action', { detail: countUp()})
+  );
+});
+</script>
