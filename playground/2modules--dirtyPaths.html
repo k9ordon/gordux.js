@@ -25,6 +25,10 @@
                 case COUNT_UP:
                     let newCounterState = {};
                     newCounterState[action.idx] = state[action.idx] + 1;
+
+                    // push all affected paths
+                    dirtyPaths.push(action.idx);
+
                     return Object.assign({}, state, newCounterState)
                 default:
                     return state[action.idx]
@@ -37,8 +41,17 @@
         };
         document.addEventListener('action', function(e) {
             store = reducer(store, e.detail);
-            document.dispatchEvent(new CustomEvent('state'));
+            document.dispatchEvent(new CustomEvent('state',
+                // send dirty paths with payload
+                {detail: {dirtyPaths: dirtyPaths}}
+            ));
+            // cleanup dirtypaths after state change happend
+            dirtyPaths = [];
         }, false);
+
+
+        // Dirty Path Store
+        var dirtyPaths = [];
 
         /** /// DEBUG
         document.addEventListener('action', function(e) {
@@ -51,6 +64,8 @@
 
         // UI render
         function render1(e) {
+            // only render if used paths are dirty
+            if(e && e.detail.dirtyPaths.indexOf(1) < 0) return;
             console.log("render1");
             let $div1 = document.querySelector('#div1');
             $div1.innerHTML = store[1];
@@ -59,6 +74,7 @@
         render1(false);
 
         function render2(e) {
+            if(e && e.detail.dirtyPaths.indexOf(2) < 0) return;
             console.log("render2");
             let $div2 = document.querySelector('#div2');
             $div2.innerHTML = store[2];
