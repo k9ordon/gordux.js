@@ -1,0 +1,81 @@
+<html>
+
+<body>
+
+    <button id="button1">countUp1</button>
+    <div id="div1"></div>
+
+    <button id="button2">countUp2</button>
+    <div id="div2"></div>
+
+    <script>
+        // Action
+        const COUNT_UP = "COUNT_UP";
+
+        function countUp(idx) {
+            return new CustomEvent('action', {
+                detail: {
+                    type: COUNT_UP,
+                    idx: idx
+                }
+            });
+        }
+
+        // Reducer
+        function reducer(state, action) {
+            switch (action.type) {
+                case COUNT_UP:
+                    let newCounterState = {};
+                    newCounterState[action.idx] = state[action.idx] + 1;
+                    return Object.assign({}, state, newCounterState)
+                default:
+                    return state[action.idx]
+            }
+        }
+        // State
+        let store = {
+            1: 0,
+            2: 0
+        };
+        document.addEventListener('action', function(e) {
+            store = reducer(store, e.detail);
+            document.dispatchEvent(new CustomEvent('state'));
+        }, false);
+
+        /** /// DEBUG
+        document.addEventListener('action', function(e) {
+            console.log("ACTION", e.detail);
+        }, false);
+        document.addEventListener('state', function(e) {
+            console.log("STATE", store);
+        }, false);
+        /**/
+
+        // UI render
+        function render1(e) {
+            console.log("render1");
+            let $div1 = document.querySelector('#div1');
+            $div1.innerHTML = store[1];
+        }
+        document.addEventListener('state', render1);
+        render1(false);
+
+        function render2(e) {
+            console.log("render2");
+            let $div2 = document.querySelector('#div2');
+            $div2.innerHTML = store[2];
+        }
+        document.addEventListener('state', render2);
+        render2(false);
+
+        // UI events
+        let $button1 = document.querySelector('#button1');
+        $button1.addEventListener("click", function() {
+            document.dispatchEvent(countUp(1));
+        });
+
+        let $button2 = document.querySelector('#button2');
+        $button2.addEventListener("click", function() {
+            document.dispatchEvent(countUp(2));
+        });
+    </script>
