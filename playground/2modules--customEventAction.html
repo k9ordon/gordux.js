@@ -13,10 +13,12 @@
         const COUNT_UP = "COUNT_UP";
 
         function countUp(idx) {
-            return {
-                type: COUNT_UP,
-                idx: idx
-            };
+            return new CustomEvent('action', {
+                detail: {
+                    type: COUNT_UP,
+                    idx: idx
+                }
+            });
         }
 
         // Reducer
@@ -69,19 +71,11 @@
         // UI events
         let $button1 = document.querySelector('#button1');
         $button1.addEventListener("click", function() {
-            document.dispatchEvent(
-                new CustomEvent('action', {
-                    detail: countUp(1)
-                })
-            );
+            document.dispatchEvent(countUp(1));
         });
 
         let $button2 = document.querySelector('#button2');
         $button2.addEventListener("click", function() {
-            document.dispatchEvent(
-                new CustomEvent('action', {
-                    detail: countUp(2)
-                })
-            );
+            document.dispatchEvent(countUp(2));
         });
     </script>
