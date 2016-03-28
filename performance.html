@@ -75,7 +75,7 @@
             // console.log('Redux updated to ' + storeRedux.getState());
             if (storeRedux.getState() == iterationCount) {
                 t1 = performance.now();
-                document.write("<p>Redux took " + (t1 - t0) + " milliseconds ("+iterationCount +" iterations).</p>");
+                document.write("<p>Redux took " + (t1 - t0).toFixed(3) + " milliseconds ("+iterationCount +" iterations).</p>");
             }
         });
 
@@ -92,8 +92,9 @@
             // console.log('Gordux updated to ' + storeGordux);
             if (storeGordux == iterationCount) {
                 t3 = performance.now();
-                document.write("<p>Gordux took " + (t3 - t2) + " milliseconds ("+iterationCount +" iterations).</p>");
-                document.write("<p>Gordux " +  ((t3 - t2) / (t1 - t0)).toFixed(1) + " x slower</p>");
+                document.write("<p>Gordux took " + (t3 - t2).toFixed(3) + " milliseconds ("+iterationCount +" iterations).</p>");
+                var perfFactor = ((t3 - t2) / (t1 - t0));
+                document.write("<p>Gordux " +  perfFactor.toFixed(1) + " x " + (perfFactor > 0 ? 'slower' : 'faster') + " than redux</p>");
             }
         });
 
