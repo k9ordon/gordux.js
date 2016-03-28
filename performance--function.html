@@ -38,16 +38,16 @@
         // STORE GORDUX
 
         var storeGordux = 0;
-        var stateListeners = [];
 
-        var state = function(listener) {
-            if(listener) stateListeners.push(listener);
-            else stateListeners.forEach(function(listener) { listener(); })
+        var stateChangeListeners = [];
+        var stateChange = function(listener) {
+            if(listener) stateChangeListeners.push(listener);
+            else stateChangeListeners.forEach(function(listener) { listener(); })
         }
 
         var dispatch = function(action) {
             storeGordux = counter(storeGordux, action);
-            state();
+            stateChange();
         };
 
 
@@ -68,7 +68,7 @@
             valueGordux.innerHTML = storeGordux.toString()
         }
 
-        state(renderGordux);
+        stateChange(renderGordux);
         renderGordux();
 
         // TEST CONFIG
@@ -94,7 +94,7 @@
 
         // START GORDUX UPDATE
 
-        state(function() {
+        stateChange(function() {
             // console.log('Gordux updated to ' + storeGordux);
             if (storeGordux == iterationCount) {
                 t3 = performance.now();
