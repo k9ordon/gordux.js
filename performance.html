@@ -67,15 +67,15 @@
 
         // TEST CONFIG
 
-        iterationCount = 1000;
+        iterationCount = 100;
 
         // START REDUX UPDATE
 
-        storeRedux.subscribe(() => {
+        storeRedux.subscribe(function() {
             // console.log('Redux updated to ' + storeRedux.getState());
             if (storeRedux.getState() == iterationCount) {
                 t1 = performance.now();
-                console.log("Redux took " + (t1 - t0) + " milliseconds ("+iterationCount +" iterations).");
+                document.write("<p>Redux took " + (t1 - t0) + " milliseconds ("+iterationCount +" iterations).</p>");
             }
         });
 
@@ -88,11 +88,12 @@
 
         // START GORDUX UPDATE
 
-        document.addEventListener('state', () => {
+        document.addEventListener('state', function() {
             // console.log('Gordux updated to ' + storeGordux);
             if (storeGordux == iterationCount) {
                 t3 = performance.now();
-                console.log("Gordux took " + (t3 - t2) + " milliseconds ("+iterationCount +" iterations).");
+                document.write("<p>Gordux took " + (t3 - t2) + " milliseconds ("+iterationCount +" iterations).</p>");
+                document.write("<p>Gordux " +  ((t3 - t2) / (t1 - t0)).toFixed(1) + " x slower</p>");
             }
         });
 
