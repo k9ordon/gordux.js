@@ -93,8 +93,7 @@
             if (storeGordux == iterationCount) {
                 t3 = performance.now();
                 document.write("<p>Gordux took " + (t3 - t2).toFixed(3) + " milliseconds ("+iterationCount +" iterations).</p>");
-                var perfFactor = ((t3 - t2) / (t1 - t0));
-                document.write("<p>Gordux " +  perfFactor.toFixed(1) + " x " + (perfFactor > 0 ? 'slower' : 'faster') + " than redux</p>");
+                document.write("<p>Gordux " +  ((t3 - t2) / (t1 - t0)).toFixed(1)  + " x " +  " vs redux</p>");
             }
         });
 
