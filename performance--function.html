@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Redux basic example</title>
+    <script src="https://npmcdn.com/redux@latest/dist/redux.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <p>
+            <span id="value-redux">0</span> times
+            <span id="value-gordux">0</span> times
+        </p>
+    </div>
+    <script>
+        // ACTIONS (Shared)
+
+        function counter(state, action) {
+            if (typeof state === 'undefined') {
+                return 0
+            }
+
+            switch (action.type) {
+                case 'INCREMENT':
+                    return state + 1
+                case 'DECREMENT':
+                    return state - 1
+                default:
+                    return state
+            }
+        }
+
+        // STORE REDUX
+
+        var storeRedux = Redux.createStore(counter)
+
+        // STORE GORDUX
+
+        var storeGordux = 0;
+        var stateListeners = [];
+
+        var state = function(listener) {
+            if(listener) stateListeners.push(listener);
+            else stateListeners.forEach(function(listener) { listener(); })
+        }
+
+        var dispatch = function(action) {
+            storeGordux = counter(storeGordux, action);
+            state();
+        };
+
+
+        // RENDER REDUX UPDATE
+        var valueRexdux = document.getElementById('value-redux');
+
+        function renderRedux() {
+            valueRexdux.innerHTML = storeRedux.getState().toString()
+        }
+
+        storeRedux.subscribe(renderRedux);
+        renderRedux();
+
+        // RENDER GORDUX UPDATE
+        var valueGordux = document.getElementById('value-gordux');
+
+        function renderGordux() {
+            valueGordux.innerHTML = storeGordux.toString()
+        }
+
+        state(renderGordux);
+        renderGordux();
+
+        // TEST CONFIG
+
+        iterationCount = 100;
+
+        // START REDUX UPDATE
+
+        storeRedux.subscribe(function() {
+            // console.log('Redux updated to ' + storeRedux.getState());
+            if (storeRedux.getState() == iterationCount) {
+                t1 = performance.now();
+                document.write("<p>Redux took " + (t1 - t0).toFixed(3) + " milliseconds ("+iterationCount +" iterations).</p>");
+            }
+        });
+
+        t0 = performance.now();
+
+        for(var i = 0; i < iterationCount; ++i) {
+            storeRedux.dispatch({ type: 'INCREMENT' });
+        }
+
+
+        // START GORDUX UPDATE
+
+        state(function() {
+            // console.log('Gordux updated to ' + storeGordux);
+            if (storeGordux == iterationCount) {
+                t3 = performance.now();
+                document.write("<p>Gordux took " + (t3 - t2).toFixed(3) + " milliseconds ("+iterationCount +" iterations).</p>");
+                document.write("<p>Gordux " +  ((t3 - t2) / (t1 - t0)).toFixed(1)  + " x " +  " vs redux</p>");
+            }
+        });
+
+        t2 = performance.now();
+
+        for(var i = 0; i < iterationCount; ++i) {
+            dispatch({ type: 'INCREMENT' });
+        }
+
+
+        </script>
+</body>
+
+</html>
